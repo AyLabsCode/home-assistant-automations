@@ -1,0 +1,87 @@
+alias: Proxmox
+action: notify.homeassistant
+metadata: {}
+data:
+  target:
+    - "1331296085976682548"
+  data:
+    embed:
+      title: "**{{ states['sensor.date'].state }}**"
+      url: http://192.168.1.122
+      thumbnail:
+        url: https://img.icons8.com/fluent/512/proxmox.png
+      fields:
+        - name: 💿 **Volumes**
+          value: ""
+          inline: false
+        - name: local Beelink
+          value: >
+            {% if
+            (states['sensor.storage_beelink_local_disk_used_percentage'].state |
+            float) < 80.0 %} ✅  {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.storage_beelink_local_disk_used_percentage'].state }}
+            %
+        - name: local-lvm Beelink
+          value: >
+            {% if
+            (states['sensor.storage_beelink_local_lvm_disk_used_percentage'].state
+            | float) < 80.0 %} ✅  {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.storage_beelink_local_lvm_disk_used_percentage'].state
+            }} %
+        - name: ""
+          value: ""
+          inline: false
+        - name: local OptiPlex
+          value: >
+            {% if
+            (states['sensor.storage_optiplex_local_disk_used_percentage'].state
+            | float) < 80.0 %} ✅  {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.storage_optiplex_local_disk_used_percentage'].state
+            }} %
+        - name: local-lvm OptiPlex
+          value: >
+            {% if
+            (states['sensor.storage_optiplex_local_lvm_disk_used_percentage'].state
+            | float) < 80.0 %} ✅  {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.storage_optiplex_local_lvm_disk_used_percentage'].state
+            }} %
+        - name: ""
+          value: ""
+          inline: false
+        - name: ""
+          value: ""
+          inline: false
+        - name: 🖥️ **Running**
+          value: ""
+          inline: false
+        - name: Containers
+          value: >
+            {{ states['sensor.node_beelink_containers_running'].state | int +
+            states['sensor.node_optiplex_containers_running'].state | int  }}
+        - name: Virtual Machines
+          value: >
+            {{ states['sensor.node_beelink_virtual_machines_running'].state |
+            int + states['sensor.node_optiplex_virtual_machines_running'].state
+            | int  }}
+        - name: ""
+          value: ""
+          inline: false
+        - name: ⚙️ **Resources Beelink**
+          value: ""
+          inline: false
+        - name: CPU
+          value: |
+            {{ states['sensor.average_cpu_beelink'].state }} %
+        - name: RAM
+          value: |
+            {{ states['sensor.average_ram_beelink'].state }} %
+        - name: ⚙️ **Resources OptiPlex**
+          value: ""
+          inline: false
+        - name: CPU
+          value: |
+            {{ states['sensor.average_cpu_optiplex'].state }} %
+        - name: RAM
+          value: |
+            {{ states['sensor.average_ram_optiplex'].state }} %
+  message: " "
