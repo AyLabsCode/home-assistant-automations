@@ -1,0 +1,83 @@
+alias: home assistant
+action: notify.homeassistant
+metadata: {}
+data:
+  target:
+    - "1325448727309320256"
+  message: " "
+  data:
+    embed:
+      title: "**{{ states['sensor.date'].state }}**"
+      url: http://192.168.1.122
+      thumbnail:
+        url: https://www.home-assistant.io/images/favicon-192x192-full.png
+      fields:
+        - name: 🪫 **Low batteries**
+          value: ""
+          inline: false
+        - name: ""
+          inline: false
+          value: >
+            {% for entity in states.sensor | selectattr('entity_id', 'match',
+            '^sensor.*_battery$') %}  {% set battery_level = entity.state |
+            float(0) %}  {% if battery_level < 40 and battery_level > 0 %} · ⚠️
+            **{{battery_level }}%** : {{ entity.entity_id | replace('sensor.',
+            '') | replace('_battery', '') }}
+
+            {% endif %}  {% endfor %}
+        - name: ""
+          value: ""
+          inline: false
+        - name: 🤖 **Zigbee devices**
+          value: ""
+          inline: false
+        - name: ""
+          inline: false
+          value: >
+            {% set threshold = now() - timedelta(hours=1) -%} {% for entity in
+            states.sensor | selectattr('entity_id', 'match',
+            '^sensor.*_last_seen$') -%} {% set last_seen =
+            as_datetime(entity.state) -%} {% if last_seen and last_seen <
+            threshold %} · ⚠️ **{{ entity.entity_id | replace('sensor.', '') |
+            replace('_last_seen', '') }}**: Last seen at {{
+            last_seen.strftime('%Y-%m-%d %H:%M:%S') }}
+
+            {% elif last_seen is none %} · ❓ **{{ entity.entity_id |
+            replace('sensor.', '') | replace('_last_seen', '') }}**: Not
+            available
+
+            {% endif %} {% endfor %}
+        - name: ""
+          value: ""
+          inline: false
+        - name: 🌡️ **Average temperature**
+          value: ""
+          inline: false
+        - name: Home
+          value: "{{ states['sensor.average_temperature_of_the_day'].state }} °C"
+        - name: Outisde
+          value: >-
+            {{ states['sensor.average_outside_temperature_of_the_day'].state }}
+            °C
+        - name: ""
+          value: ""
+          inline: false
+        - name: ⚡️ **Energy consumed**
+          value: ""
+          inline: false
+        - name: HP
+          value: "{{ states['sensor.energy_hp'].state }} kW"
+        - name: HC
+          value: "{{ states['sensor.energy_hc'].state }} kW"
+        - name: ""
+          value: ""
+          inline: false
+        - name: ⚙️ **Resources**
+          value: ""
+          inline: false
+        - name: CPU
+          value: |
+            {{ states['sensor.average_cpu_ha'].state }} %
+        - name: RAM
+          value: |
+            {{ states['sensor.average_ram_ha'].state }} %
