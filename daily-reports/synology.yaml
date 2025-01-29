@@ -1,0 +1,72 @@
+alias: synology
+action: notify.homeassistant
+metadata: {}
+data:
+  target:
+    - "1331296085976682548"
+  message: " "
+  data:
+    embed:
+      title: "**{{ states['sensor.date'].state }}**"
+      url: http://192.168.1.122
+      thumbnail:
+        url: >-
+          https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Synology_Logo.svg/2560px-Synology_Logo.svg.png
+      fields:
+        - name: 💿 **Volumes**
+          value: ""
+          inline: false
+        - name: Data
+          value: >
+            {% if (states['sensor.aynas_volume_1_volume_utilise'].state | float)
+            < 80.0 %} ✅ {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_volume_1_volume_utilise'].state }} %
+        - name: Multimedia
+          value: >
+            {% if (states['sensor.aynas_volume_2_volume_utilise'].state | float)
+            < 80.0 %} ✅  {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_volume_2_volume_utilise'].state }} %
+        - name: ""
+          value: ""
+          inline: false
+        - name: ""
+          value: ""
+          inline: false
+        - name: 💾 **Disques**
+          value: ""
+          inline: false
+        - name: Drive 1
+          value: >
+            {% if (states['sensor.aynas_drive_1_etat'].state) == "normal" %} ✅ 
+            {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_drive_1_etat'].state }} 
+        - name: Drive 2
+          value: >
+            {% if (states['sensor.aynas_drive_2_etat'].state) == "normal" %} ✅ 
+            {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_drive_2_etat'].state }} 
+        - name: Drive 3
+          value: >
+            {% if (states['sensor.aynas_drive_3_etat'].state) == "normal" %} ✅ 
+            {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_drive_3_etat'].state }} 
+        - name: Drive 4
+          value: >
+            {% if (states['sensor.aynas_drive_4_etat'].state) == "normal" %} ✅ 
+            {% else %} ⚠️ @everyone  {% endif %} {{
+            states['sensor.aynas_drive_4_etat'].state }} 
+        - name: ""
+          value: ""
+          inline: false
+        - name: ""
+          value: ""
+          inline: false
+        - name: ⚙️ **Resources**
+          value: ""
+          inline: false
+        - name: CPU
+          value: |
+            {{ states['sensor.average_cpu_nas'].state }} %
+        - name: RAM
+          value: |
+            {{ states['sensor.average_ram_nas'].state }} %
